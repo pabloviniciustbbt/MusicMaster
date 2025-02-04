@@ -1,10 +1,23 @@
-package com.pabloleal.musicmaster.Main;
+package com.pabloleal.musicmaster.main;
 
+import com.pabloleal.musicmaster.models.Artista;
+import com.pabloleal.musicmaster.repository.ArtistaRepository;
+import com.pabloleal.musicmaster.repository.MusicaRepository;
+
+import java.util.Optional;
 import java.util.Scanner;
 
 public class Main {
 
-    Scanner scan = new Scanner(System.in);
+    private Scanner scan = new Scanner(System.in);
+    private ArtistaRepository artistaRepository;
+    private MusicaRepository musicaRepository;
+    private Optional<Artista> artistaBuscado;
+
+    public Main(ArtistaRepository artistaRepository, MusicaRepository musicaRepository) {
+        this.artistaRepository = artistaRepository;
+        this.musicaRepository = musicaRepository;
+    }
 
     public void exibeMenu() {
 
@@ -55,6 +68,21 @@ public class Main {
     }
 
     private void cadastrarArtista() {
+
+        Artista artista = new Artista();
+
+        System.out.print("Digite o nome do Artista: ");
+        String nomeDigitado = scan.nextLine();
+
+        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+        if (artistaBuscado.isPresent()){
+            System.out.println("\nArtista já cadastrado no banco de dados!");
+        } else {
+            artista.setNome(nomeDigitado);
+            artistaRepository.save(artista);
+            System.out.println("Artista salvo com Sucesso!");
+        }
 
     }
 
