@@ -135,6 +135,22 @@ public class Main {
 
     private void burcarMusicaPorArtista(){
 
+        listarArtistas();
+
+        System.out.print("\nDigite o nome do Artista: ");
+        String nomeDigitado = scan.nextLine();
+
+        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+        if (!artistaBuscado.isPresent()){
+            System.out.println("\nArtista não encontrado!");
+        } else {
+            List<Musica> musicaList = artistaBuscado.get().getMusicas();
+
+            musicaList.stream()
+                    .forEach(System.out::println);
+        }
+
     }
 
     private void pesquisarDadosArtista(){
