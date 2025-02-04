@@ -5,6 +5,7 @@ import com.pabloleal.musicmaster.models.Musica;
 import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -117,10 +118,19 @@ public class Main {
 
     private void listarArtistas(){
 
+        List<Artista> artistaList = artistaRepository.findAll();
+
+        artistaList.stream()
+                .forEach(System.out::println);
+
     }
 
     private void listarMusicas(){
 
+        List<Musica> musicaList = musicaRepository.findAll();
+
+        musicaList.stream()
+                .forEach(System.out::println);
     }
 
     private void burcarMusicaPorArtista(){
