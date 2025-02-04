@@ -15,7 +15,8 @@ public class Artista {
     @Column (unique = true)
     private String nome;
 
-    @OneToMany (mappedBy = "artista")
+    @OneToMany (mappedBy = "artista",
+                fetch = FetchType.EAGER)
     private List<Musica> musicas;
 
     public Long getId() {

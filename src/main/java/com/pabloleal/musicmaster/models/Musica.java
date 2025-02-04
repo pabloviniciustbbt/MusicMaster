@@ -52,6 +52,6 @@ public class Musica {
     public String toString() {
         return "Nome da Música = " + titulo +
                "\nGenero Musical = " + generoMusical +
-               "\nArtista = " + artista;
+               "\nArtista = " + artista + "\n";
     }
 }
