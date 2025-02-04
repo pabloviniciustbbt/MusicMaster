@@ -1,6 +1,7 @@
 package com.pabloleal.musicmaster.main;
 
 import com.pabloleal.musicmaster.models.Artista;
+import com.pabloleal.musicmaster.models.Musica;
 import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
 
@@ -67,9 +68,12 @@ public class Main {
         }
     }
 
-    private void cadastrarArtista() {
-
+    public void cadastarArtista(String nomeArtista){
         Artista artista = new Artista();
+        artista.setNome(nomeArtista);
+        artistaRepository.save(artista);
+    }
+    private void cadastrarArtista() {
 
         System.out.print("Digite o nome do Artista: ");
         String nomeDigitado = scan.nextLine();
@@ -77,16 +81,37 @@ public class Main {
         artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
         if (artistaBuscado.isPresent()){
-            System.out.println("\nArtista já cadastrado no banco de dados!");
+            System.out.println("\nArtista já cadastrado no banco de dados!\n");
         } else {
-            artista.setNome(nomeDigitado);
-            artistaRepository.save(artista);
-            System.out.println("Artista salvo com Sucesso!");
+            cadastarArtista(nomeDigitado);
+            System.out.println("\nArtista salvo com Sucesso!\n");
         }
 
     }
 
     private void cadastrarMusica(){
+
+        Musica musica = new Musica();
+
+        System.out.print("\nDigite o nome da Música: ");
+        String nomeMusica = scan.nextLine();
+
+        System.out.print("Digite o nome do Artista: ");
+        String nomeDigitado = scan.nextLine();
+
+        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+        if (!artistaBuscado.isPresent()){
+            cadastarArtista(nomeDigitado);
+        }
+
+        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+        musica.setTitulo(nomeMusica);
+        musica.setArtista(artistaBuscado.get());
+        musicaRepository.save(musica);
+
+        System.out.println("\nMúsica salva com sucesso!");
 
     }
 
