@@ -51,8 +51,8 @@ public class Musica {
 
     @Override
     public String toString() {
-        return "Nome da Música = " + titulo +
-               "\nGenero Musical = " + generoMusical +
-               "\nArtista = " + artista + "\n";
+        return "\nNome da Música = " + titulo +
+                "\nArtista = " + artista +
+                "\nGenero Musical = " + generoMusical;
     }
 }
