@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Main {
 
@@ -150,7 +151,7 @@ public class Main {
         musica.setGeneroMusical(generoMusical);
         musicaRepository.save(musica);
 
-        System.out.println("\nMúsica salva com sucesso!");
+        System.out.println("\nMúsica salva com sucesso!\n");
 
     }
 
@@ -181,7 +182,7 @@ public class Main {
         artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
         if (!artistaBuscado.isPresent()){
-            System.out.println("\nArtista não encontrado!");
+            System.out.println("\nArtista não encontrado!\n");
         } else {
             List<Musica> musicaList = artistaBuscado.get().getMusicas();
 
@@ -198,10 +199,15 @@ public class Main {
 
         List<Musica> musicaList = musicaRepository.findAll();
 
-        musicaList.stream()
+        List<Musica> musicasFiltradas = musicaList.stream()
                 .filter(m -> m.getGeneroMusical().getNumeroGenero() == generoDigitado)
-                .forEach(System.out::println);
+                .collect(Collectors.toList());
 
+        if (!musicasFiltradas.isEmpty()){
+            musicasFiltradas.forEach(System.out::println);
+        } else {
+            System.out.println("\nNenhuma música encontrada para o gênero selecionado!\n");
+        }
     }
 
     private void pesquisarDadosArtista(){
