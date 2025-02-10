@@ -11,6 +11,7 @@ public class Musica {
     private Long id;
 
     private String titulo;
+    @Enumerated(EnumType.STRING)
     private GeneroMusical generoMusical;
 
     @ManyToOne
