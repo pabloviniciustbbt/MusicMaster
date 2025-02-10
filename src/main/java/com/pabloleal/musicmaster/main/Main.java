@@ -6,6 +6,7 @@ import com.pabloleal.musicmaster.models.Musica;
 import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -16,6 +17,31 @@ public class Main {
     private ArtistaRepository artistaRepository;
     private MusicaRepository musicaRepository;
     private Optional<Artista> artistaBuscado;
+
+    private String menuGenero = """
+                Escolha o gênero musical da música:
+                
+                1 - Axe
+                2 - Blues
+                3 - Classica
+                4 - Eletronica
+                5 - Forro
+                6 - Funk
+                7 - Gospel
+                8 - Hiphop
+                9 - Indie
+                10 - Mpb
+                11 - Pagode
+                12 - Pop
+                13 - Punk
+                14 - Reggae
+                15 - Rock
+                16 - Samba
+                17 - Sertanejo
+                18 - Soundtracks
+                19 - Trap
+                
+                Digite o número correspondente ao gênero: """;
 
     public Main(ArtistaRepository artistaRepository, MusicaRepository musicaRepository) {
         this.artistaRepository = artistaRepository;
@@ -38,7 +64,8 @@ public class Main {
                     3 - Listar Artistas
                     4 - Listar Músicas
                     5 - Buscar Músicas por Artistas
-                    6 - Pesquisar Dados Sobre um Artista
+                    6 - Listar Músicas por Gênero
+                    7 - Pesquisar Dados Sobre um Artista
                     0 - Sair
                                         
                     Digite Aqui: """;
@@ -64,6 +91,9 @@ public class Main {
                     burcarMusicaPorArtista();
                     break;
                 case 6:
+                    listarMusicasPorGenero();
+                    break;
+                case 7:
                     pesquisarDadosArtista();
                     break;
             }
@@ -109,31 +139,6 @@ public class Main {
         }
 
         artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
-
-        String menuGenero = """
-                Escolha o gênero musical da música:
-                
-                1 - Axe
-                2 - Blues
-                3 - Classica
-                4 - Eletronica
-                5 - Forro
-                6 - Funk
-                7 - Gospel
-                8 - Hiphop
-                9 - Indie
-                10 - Mpb
-                11 - Pagode
-                12 - Pop
-                13 - Punk
-                14 - Reggae
-                15 - Rock
-                16 - Samba
-                17 - Sertanejo
-                18 - Soundtracks
-                19 - Trap
-                
-                Digite o número correspondente ao gênero: """;
 
         System.out.println(menuGenero);
         int generoDigitado = scan.nextInt();
@@ -183,6 +188,19 @@ public class Main {
             musicaList.stream()
                     .forEach(System.out::println);
         }
+
+    }
+
+    private void listarMusicasPorGenero(){
+
+        System.out.println(menuGenero);
+        int generoDigitado = scan.nextInt();
+
+        List<Musica> musicaList = musicaRepository.findAll();
+
+        musicaList.stream()
+                .filter(m -> m.getGeneroMusical().getNumeroGenero() == generoDigitado)
+                .forEach(System.out::println);
 
     }
 
