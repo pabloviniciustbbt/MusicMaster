@@ -1,6 +1,7 @@
 package com.pabloleal.musicmaster.main;
 
 import com.pabloleal.musicmaster.models.Artista;
+import com.pabloleal.musicmaster.models.GeneroMusical;
 import com.pabloleal.musicmaster.models.Musica;
 import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
@@ -95,10 +96,11 @@ public class Main {
         Musica musica = new Musica();
 
         System.out.print("\nDigite o nome da Música: ");
-        String nomeMusica = scan.nextLine();
+        String musicaDigitada = scan.nextLine();
 
         System.out.print("Digite o nome do Artista: ");
         String nomeDigitado = scan.nextLine();
+
 
         artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
@@ -108,8 +110,39 @@ public class Main {
 
         artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
-        musica.setTitulo(nomeMusica);
+        String menuGenero = """
+                Escolha o gênero musical da música:
+                
+                1 - Axe
+                2 - Blues
+                3 - Classica
+                4 - Eletronica
+                5 - Forro
+                6 - Funk
+                7 - Gospel
+                8 - Hiphop
+                9 - Indie
+                10 - Mpb
+                11 - Pagode
+                12 - Pop
+                13 - Punk
+                14 - Reggae
+                15 - Rock
+                16 - Samba
+                17 - Sertanejo
+                18 - Soundtracks
+                19 - Trap
+                
+                Digite o número correspondente ao gênero: """;
+
+        System.out.println(menuGenero);
+        int generoDigitado = scan.nextInt();
+
+        GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
+
+        musica.setTitulo(musicaDigitada);
         musica.setArtista(artistaBuscado.get());
+        musica.setGeneroMusical(generoMusical);
         musicaRepository.save(musica);
 
         System.out.println("\nMúsica salva com sucesso!");
