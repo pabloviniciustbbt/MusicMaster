@@ -52,7 +52,7 @@ public class Musica {
     @Override
     public String toString() {
         return "\nNome da Música = " + titulo +
-                "\nArtista = " + artista +
-                "\nGenero Musical = " + generoMusical;
+                "\nArtista = " + artista.getNome() +
+                "\nGenero Musical = " + generoMusical + "\n";
     }
 }
