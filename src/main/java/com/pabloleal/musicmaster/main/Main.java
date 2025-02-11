@@ -149,6 +149,9 @@ public class Main {
         musica.setTitulo(musicaDigitada);
         musica.setArtista(artistaBuscado.get());
         musica.setGeneroMusical(generoMusical);
+
+        artistaBuscado.get().getMusicas().add(musica);
+
         musicaRepository.save(musica);
 
         System.out.println("\nMúsica salva com sucesso!\n");
@@ -174,20 +177,21 @@ public class Main {
 
     private void burcarMusicaPorArtista(){
 
-        listarArtistas();
+        List<Artista> artistaList = artistaRepository.findAll();
+        artistaList.stream()
+                        .map(Artista::getNome)
+                                .forEach(System.out::println);
 
         System.out.print("\nDigite o nome do Artista: ");
         String nomeDigitado = scan.nextLine();
 
-        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+        List<Musica> musicaList = musicaRepository.buscaMusicasPorArtista(nomeDigitado);
 
-        if (!artistaBuscado.isPresent()){
-            System.out.println("\nArtista não encontrado!\n");
-        } else {
-            List<Musica> musicaList = artistaBuscado.get().getMusicas();
-
+        if (!musicaList.isEmpty()){
             musicaList.stream()
                     .forEach(System.out::println);
+        } else {
+            System.out.println("\nNenhuma música de " + nomeDigitado + " foi encontrada!\n");
         }
 
     }
