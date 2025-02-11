@@ -16,6 +16,7 @@ public class Artista {
     private String nome;
 
     @OneToMany (mappedBy = "artista",
+                cascade = CascadeType.ALL,
                 fetch = FetchType.EAGER)
     private List<Musica> musicas;
 
@@ -45,6 +46,7 @@ public class Artista {
 
     @Override
     public String toString() {
-        return nome;
+        return "\n" + nome +
+                "\nMúsicas = " + musicas;
     }
 }
