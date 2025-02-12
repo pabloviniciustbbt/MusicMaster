@@ -5,6 +5,7 @@ import com.pabloleal.musicmaster.models.GeneroMusical;
 import com.pabloleal.musicmaster.models.Musica;
 import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
+import com.pabloleal.musicmaster.services.ConsultaGemini;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,6 +216,13 @@ public class Main {
     }
 
     private void pesquisarDadosArtista(){
+
+        System.out.print("\nVocê quer pesquisar dados sobre qual Artista? ");
+        String nomeArtista = scan.nextLine();
+
+
+        String resposta = ConsultaGemini.obterDadosArtista(nomeArtista);
+        System.out.println(resposta.trim() + "\n");
 
     }
 
