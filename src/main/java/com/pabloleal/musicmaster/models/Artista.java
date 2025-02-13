@@ -9,16 +9,23 @@ import java.util.List;
 public class Artista {
 
     @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column (unique = true)
+    @Column(unique = true)
     private String nome;
 
-    @OneToMany (mappedBy = "artista",
-                cascade = CascadeType.ALL,
-                fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "artista",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.EAGER)
     private List<Musica> musicas;
+
+    public Artista() {
+    }
+
+    public Artista(String nome) {
+        this.nome = nome;
+    }
 
     public Long getId() {
         return id;
