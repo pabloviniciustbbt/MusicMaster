@@ -193,10 +193,8 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            List<Artista> artistaList = artistaRepository.findAll();
-            artistaList.stream()
-                    .map(Artista::getNome)
-                    .forEach(System.out::println);
+            List<String> artistaList = artistaRepository.listarArtistasOrdemAlfabetica();
+            artistaList.forEach(System.out::println);
 
             System.out.print("\nDigite o nome do Artista: ");
             String nomeDigitado = scan.nextLine();
