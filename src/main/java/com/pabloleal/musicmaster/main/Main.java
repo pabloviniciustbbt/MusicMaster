@@ -104,8 +104,7 @@ public class Main {
     }
 
     public void cadastarArtista(String nomeArtista) {
-        Artista artista = new Artista();
-        artista.setNome(nomeArtista);
+        Artista artista = new Artista(nomeArtista);
         artistaRepository.save(artista);
     }
 
@@ -129,7 +128,6 @@ public class Main {
 
             System.out.print("Gostaria de cadastrar outro artista (S/N)? ");
             opcao = scan.nextLine();
-            scan.nextLine();
 
         }
     }
@@ -140,14 +138,11 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            Musica musica = new Musica();
-
             System.out.print("\nDigite o nome da Música: ");
             String musicaDigitada = scan.nextLine();
 
             System.out.print("Digite o nome do Artista: ");
             String nomeDigitado = scan.nextLine();
-
 
             artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
@@ -163,11 +158,7 @@ public class Main {
 
             GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
 
-            musica.setTitulo(musicaDigitada);
-            musica.setArtista(artistaBuscado.get());
-            musica.setGeneroMusical(generoMusical);
-
-            artistaBuscado.get().getMusicas().add(musica);
+            Musica musica = new Musica(musicaDigitada, artistaBuscado.get(), generoMusical);
 
             musicaRepository.save(musica);
 
