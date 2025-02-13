@@ -7,7 +7,6 @@ import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
 import com.pabloleal.musicmaster.services.ConsultaGemini;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -21,29 +20,30 @@ public class Main {
     private Optional<Artista> artistaBuscado;
 
     private String menuGenero = """
-                Escolha o gênero musical da música:
-                
-                1 - Axe
-                2 - Blues
-                3 - Classica
-                4 - Eletronica
-                5 - Forro
-                6 - Funk
-                7 - Gospel
-                8 - Hiphop
-                9 - Indie
-                10 - Mpb
-                11 - Pagode
-                12 - Pop
-                13 - Punk
-                14 - Reggae
-                15 - Rock
-                16 - Samba
-                17 - Sertanejo
-                18 - Soundtracks
-                19 - Trap
-                
-                Digite o número correspondente ao gênero: """;
+                        
+            Escolha o gênero musical da música:
+                            
+            1 - Axe
+            2 - Blues
+            3 - Classica
+            4 - Eletronica
+            5 - Forro
+            6 - Funk
+            7 - Gospel
+            8 - Hiphop
+            9 - Indie
+            10 - Mpb
+            11 - Pagode
+            12 - Pop
+            13 - Punk
+            14 - Reggae
+            15 - Rock
+            16 - Samba
+            17 - Sertanejo
+            18 - Soundtracks
+            19 - Trap
+                            
+            Digite o número correspondente ao gênero: """;
 
     public Main(ArtistaRepository artistaRepository, MusicaRepository musicaRepository) {
         this.artistaRepository = artistaRepository;
@@ -57,6 +57,7 @@ public class Main {
         while (opcao != 0) {
 
             String menu = """
+                                        
                     =================================
                               Music Master
                     =================================
@@ -102,64 +103,83 @@ public class Main {
         }
     }
 
-    public void cadastarArtista(String nomeArtista){
+    public void cadastarArtista(String nomeArtista) {
         Artista artista = new Artista();
         artista.setNome(nomeArtista);
         artistaRepository.save(artista);
     }
+
     private void cadastrarArtista() {
 
-        System.out.print("Digite o nome do Artista: ");
-        String nomeDigitado = scan.nextLine();
+        String opcao = "s";
 
-        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+        while (opcao.equalsIgnoreCase("s")) {
 
-        if (artistaBuscado.isPresent()){
-            System.out.println("\nArtista já cadastrado no banco de dados!\n");
-        } else {
-            cadastarArtista(nomeDigitado);
-            System.out.println("\nArtista salvo com Sucesso!\n");
+            System.out.print("Digite o nome do Artista: ");
+            String nomeDigitado = scan.nextLine();
+
+            artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+            if (artistaBuscado.isPresent()) {
+                System.out.println("\nArtista já cadastrado no banco de dados!\n");
+            } else {
+                cadastarArtista(nomeDigitado);
+                System.out.println("\nArtista salvo com Sucesso!\n");
+            }
+
+            System.out.print("Gostaria de cadastrar outro artista (S/N)? ");
+            opcao = scan.nextLine();
+            scan.nextLine();
+
         }
-
     }
 
-    private void cadastrarMusica(){
+    private void cadastrarMusica() {
 
-        Musica musica = new Musica();
+        String opcao = "s";
 
-        System.out.print("\nDigite o nome da Música: ");
-        String musicaDigitada = scan.nextLine();
+        while (opcao.equalsIgnoreCase("s")) {
 
-        System.out.print("Digite o nome do Artista: ");
-        String nomeDigitado = scan.nextLine();
+            Musica musica = new Musica();
+
+            System.out.print("\nDigite o nome da Música: ");
+            String musicaDigitada = scan.nextLine();
+
+            System.out.print("Digite o nome do Artista: ");
+            String nomeDigitado = scan.nextLine();
 
 
-        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+            artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
-        if (!artistaBuscado.isPresent()){
-            cadastarArtista(nomeDigitado);
+            if (!artistaBuscado.isPresent()) {
+                cadastarArtista(nomeDigitado);
+            }
+
+            artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+            System.out.println(menuGenero);
+            int generoDigitado = scan.nextInt();
+            scan.nextLine();
+
+            GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
+
+            musica.setTitulo(musicaDigitada);
+            musica.setArtista(artistaBuscado.get());
+            musica.setGeneroMusical(generoMusical);
+
+            artistaBuscado.get().getMusicas().add(musica);
+
+            musicaRepository.save(musica);
+
+            System.out.println("\nMúsica salva com sucesso!\n");
+
+            System.out.print("Gostaria de cadastrar outra música (S/N)? ");
+            opcao = scan.nextLine();
+
         }
-
-        artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
-
-        System.out.println(menuGenero);
-        int generoDigitado = scan.nextInt();
-
-        GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
-
-        musica.setTitulo(musicaDigitada);
-        musica.setArtista(artistaBuscado.get());
-        musica.setGeneroMusical(generoMusical);
-
-        artistaBuscado.get().getMusicas().add(musica);
-
-        musicaRepository.save(musica);
-
-        System.out.println("\nMúsica salva com sucesso!\n");
-
     }
 
-    private void listarArtistas(){
+    private void listarArtistas() {
 
         List<Artista> artistaList = artistaRepository.findAll();
 
@@ -168,7 +188,7 @@ public class Main {
 
     }
 
-    private void listarMusicas(){
+    private void listarMusicas() {
 
         List<Musica> musicaList = musicaRepository.findAll();
 
@@ -176,55 +196,80 @@ public class Main {
                 .forEach(System.out::println);
     }
 
-    private void burcarMusicaPorArtista(){
+    private void burcarMusicaPorArtista() {
 
-        List<Artista> artistaList = artistaRepository.findAll();
-        artistaList.stream()
-                        .map(Artista::getNome)
-                                .forEach(System.out::println);
+        String opcao = "s";
 
-        System.out.print("\nDigite o nome do Artista: ");
-        String nomeDigitado = scan.nextLine();
+        while (opcao.equalsIgnoreCase("s")) {
 
-        List<Musica> musicaList = musicaRepository.buscaMusicasPorArtista(nomeDigitado);
-
-        if (!musicaList.isEmpty()){
-            musicaList.stream()
+            List<Artista> artistaList = artistaRepository.findAll();
+            artistaList.stream()
+                    .map(Artista::getNome)
                     .forEach(System.out::println);
-        } else {
-            System.out.println("\nNenhuma música de " + nomeDigitado + " foi encontrada!\n");
-        }
 
-    }
+            System.out.print("\nDigite o nome do Artista: ");
+            String nomeDigitado = scan.nextLine();
 
-    private void listarMusicasPorGenero(){
+            List<Musica> musicaList = musicaRepository.buscaMusicasPorArtista(nomeDigitado);
 
-        System.out.println(menuGenero);
-        int generoDigitado = scan.nextInt();
+            if (!musicaList.isEmpty()) {
+                musicaList.stream()
+                        .forEach(System.out::println);
+            } else {
+                System.out.println("\nNenhuma música de " + nomeDigitado + " foi encontrada!\n");
+            }
 
-        List<Musica> musicaList = musicaRepository.findAll();
+            System.out.print("Gostaria de realizar uma nova busca (S/N)? ");
+            opcao = scan.nextLine();
 
-        List<Musica> musicasFiltradas = musicaList.stream()
-                .filter(m -> m.getGeneroMusical().getNumeroGenero() == generoDigitado)
-                .collect(Collectors.toList());
-
-        if (!musicasFiltradas.isEmpty()){
-            musicasFiltradas.forEach(System.out::println);
-        } else {
-            System.out.println("\nNenhuma música encontrada para o gênero selecionado!\n");
         }
     }
 
-    private void pesquisarDadosArtista(){
+    private void listarMusicasPorGenero() {
 
-        System.out.print("\nVocê quer pesquisar dados sobre qual Artista? ");
-        String nomeArtista = scan.nextLine();
+        String opcao = "s";
+
+        while (opcao.equalsIgnoreCase("s")) {
+
+            System.out.println(menuGenero);
+            int generoDigitado = scan.nextInt();
+            scan.nextLine();
+
+            List<Musica> musicaList = musicaRepository.findAll();
+
+            List<Musica> musicasFiltradas = musicaList.stream()
+                    .filter(m -> m.getGeneroMusical().getNumeroGenero() == generoDigitado)
+                    .collect(Collectors.toList());
+
+            if (!musicasFiltradas.isEmpty()) {
+                musicasFiltradas.forEach(System.out::println);
+            } else {
+                System.out.println("\nNenhuma música encontrada para o gênero selecionado!\n");
+            }
+
+            System.out.print("Gostaria de realizar uma nova consulta (S/N)? ");
+            opcao = scan.nextLine();
 
 
-        String resposta = ConsultaGemini.obterDadosArtista(nomeArtista);
-        System.out.println(resposta.trim() + "\n");
-
+        }
     }
 
+    private void pesquisarDadosArtista() {
 
+        String opcao = "s";
+
+        while (opcao.equalsIgnoreCase("s")) {
+
+            System.out.print("\nVocê quer pesquisar dados sobre qual Artista? ");
+            String nomeArtista = scan.nextLine();
+
+
+            String resposta = ConsultaGemini.obterDadosArtista(nomeArtista);
+            System.out.println(resposta.trim() + "\n");
+
+            System.out.print("Gostaria de realizar uma nova pesquisa (S/N)? ");
+            opcao = scan.nextLine();
+
+        }
+    }
 }
