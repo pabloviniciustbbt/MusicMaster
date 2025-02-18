@@ -1,5 +1,6 @@
 package com.pabloleal.musicmaster.main;
 
+import com.pabloleal.musicmaster.exceptions.MusicaException;
 import com.pabloleal.musicmaster.models.Artista;
 import com.pabloleal.musicmaster.models.GeneroMusical;
 import com.pabloleal.musicmaster.models.Musica;
@@ -78,10 +79,10 @@ public class Main {
                 System.out.print(menu);
                 opcao = scan.nextInt();
                 scan.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("\n=================================" +
-                                   "\n         Entrada Invalida" +
-                                   "\n=================================");
+                        "\n         Entrada Invalida" +
+                        "\n=================================");
                 scan.nextLine();
                 continue;
             }
@@ -167,10 +168,10 @@ public class Main {
                 System.out.println(menuGenero);
                 generoDigitado = scan.nextInt();
                 scan.nextLine();
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 System.out.println("\n=================================" +
-                                   "\n         Entrada Invalida" +
-                                   "\n=================================");
+                        "\n         Entrada Invalida" +
+                        "\n=================================");
                 scan.nextLine();
                 continue;
             }
@@ -239,30 +240,25 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            int generoDigitado;
-
             try {
                 System.out.println(menuGenero);
-                generoDigitado = scan.nextInt();
+                int generoDigitado = scan.nextInt();
                 scan.nextLine();
-            } catch (InputMismatchException e){
+
+                if (generoDigitado < 1 || generoDigitado > 19) {
+                    throw new MusicaException("\nGênero Musical não encontrado!\n");
+                }
+
+                exibirMusicasGeneroSelecionado(generoDigitado);
+
+            } catch (MusicaException e) {
+                System.out.println(e.getMessage());
+            } catch (InputMismatchException e) {
                 System.out.println("\n=================================" +
                                    "\n         Entrada Invalida" +
                                    "\n=================================");
                 scan.nextLine();
                 continue;
-            }
-
-            List<Musica> musicaList = musicaRepository.findAll();
-
-            List<Musica> musicasFiltradas = musicaList.stream()
-                    .filter(m -> m.getGeneroMusical().getNumeroGenero() == generoDigitado)
-                    .collect(Collectors.toList());
-
-            if (!musicasFiltradas.isEmpty()) {
-                musicasFiltradas.forEach(System.out::println);
-            } else {
-                System.out.println("\nNenhuma música encontrada para o gênero selecionado!\n");
             }
 
             System.out.print("Gostaria de realizar uma nova consulta (S/N)? ");
@@ -287,6 +283,20 @@ public class Main {
             System.out.print("Gostaria de realizar uma nova pesquisa (S/N)? ");
             opcao = scan.nextLine();
 
+        }
+    }
+
+    private void exibirMusicasGeneroSelecionado(int generoDigitado) {
+        List<Musica> musicaList = musicaRepository.findAll();
+
+        List<Musica> musicasFiltradas = musicaList.stream()
+                .filter(m -> m.getGeneroMusical().getNumeroGenero() == generoDigitado)
+                .collect(Collectors.toList());
+
+        if (!musicasFiltradas.isEmpty()) {
+            musicasFiltradas.forEach(System.out::println);
+        } else {
+            System.out.println("\nNenhuma música encontrada para o gênero selecionado!\n");
         }
     }
 }
