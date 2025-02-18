@@ -147,6 +147,8 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
+            int generoDigitado;
+
             System.out.print("\nDigite o nome da Música: ");
             String musicaDigitada = scan.nextLine();
 
@@ -161,9 +163,17 @@ public class Main {
 
             artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
-            System.out.println(menuGenero);
-            int generoDigitado = scan.nextInt();
-            scan.nextLine();
+            try {
+                System.out.println(menuGenero);
+                generoDigitado = scan.nextInt();
+                scan.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("\n=================================" +
+                                   "\n         Entrada Invalida" +
+                                   "\n=================================");
+                scan.nextLine();
+                continue;
+            }
 
             GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
 
