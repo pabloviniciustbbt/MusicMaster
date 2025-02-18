@@ -239,9 +239,19 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            System.out.println(menuGenero);
-            int generoDigitado = scan.nextInt();
-            scan.nextLine();
+            int generoDigitado;
+
+            try {
+                System.out.println(menuGenero);
+                generoDigitado = scan.nextInt();
+                scan.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("\n=================================" +
+                                   "\n         Entrada Invalida" +
+                                   "\n=================================");
+                scan.nextLine();
+                continue;
+            }
 
             List<Musica> musicaList = musicaRepository.findAll();
 
@@ -257,7 +267,6 @@ public class Main {
 
             System.out.print("Gostaria de realizar uma nova consulta (S/N)? ");
             opcao = scan.nextLine();
-
 
         }
     }
