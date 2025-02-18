@@ -7,6 +7,7 @@ import com.pabloleal.musicmaster.repository.ArtistaRepository;
 import com.pabloleal.musicmaster.repository.MusicaRepository;
 import com.pabloleal.musicmaster.services.ConsultaGemini;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Scanner;
@@ -73,9 +74,17 @@ public class Main {
                                         
                     Digite Aqui: """;
 
-            System.out.print(menu);
-            opcao = scan.nextInt();
-            scan.nextLine();
+            try {
+                System.out.print(menu);
+                opcao = scan.nextInt();
+                scan.nextLine();
+            } catch (InputMismatchException e){
+                System.out.println("\n=================================" +
+                                   "\n         Entrada Invalida" +
+                                   "\n=================================");
+                scan.nextLine();
+                continue;
+            }
 
             switch (opcao) {
                 case 1:
@@ -103,7 +112,7 @@ public class Main {
         }
     }
 
-    public void cadastarArtista(String nomeArtista) {
+    public void cadastrarArtista(String nomeArtista) {
         Artista artista = new Artista(nomeArtista);
         artistaRepository.save(artista);
     }
@@ -122,7 +131,7 @@ public class Main {
             if (artistaBuscado.isPresent()) {
                 System.out.println("\nArtista já cadastrado no banco de dados!\n");
             } else {
-                cadastarArtista(nomeDigitado);
+                cadastrarArtista(nomeDigitado);
                 System.out.println("\nArtista salvo com Sucesso!\n");
             }
 
@@ -147,7 +156,7 @@ public class Main {
             artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
             if (!artistaBuscado.isPresent()) {
-                cadastarArtista(nomeDigitado);
+                cadastrarArtista(nomeDigitado);
             }
 
             artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
