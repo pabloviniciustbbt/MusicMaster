@@ -12,4 +12,6 @@ public interface ArtistaRepository extends JpaRepository<Artista, Long> {
 
     @Query("SELECT a.nome FROM Artista a ORDER BY a.nome ASC")
     List<String> listarArtistasOrdemAlfabetica();
+
+    List<Artista> findAllByOrderByNomeAsc();
 }
