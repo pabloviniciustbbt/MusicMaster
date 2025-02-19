@@ -192,10 +192,8 @@ public class Main {
 
     private void listarArtistas() {
 
-        List<Artista> artistaList = artistaRepository.findAll();
-
-        artistaList.stream()
-                .forEach(System.out::println);
+        List<Artista> artistaList = artistaRepository.findAllByOrderByNomeAsc();
+        artistaList.forEach(System.out::println);
 
     }
 
