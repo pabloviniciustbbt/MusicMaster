@@ -10,4 +10,5 @@ public interface MusicaRepository extends JpaRepository<Musica, Long> {
     @Query("SELECT m FROM Musica m JOIN m.artista a WHERE a.nome ILIKE %:nomeDigitado%")
     List<Musica> buscaMusicasPorArtista(String nomeDigitado);
 
+    List<Musica> findAllByOrderByTituloAsc();
 }
