@@ -199,10 +199,9 @@ public class Main {
 
     private void listarMusicas() {
 
-        List<Musica> musicaList = musicaRepository.findAll();
+        List<Musica> musicaList = musicaRepository.findAllByOrderByTituloAsc();
 
-        musicaList.stream()
-                .forEach(System.out::println);
+        musicaList.forEach(System.out::println);
     }
 
     private void burcarMusicaPorArtista() {
