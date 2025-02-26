@@ -228,24 +228,31 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            List<String> artistaList = artistaRepository.listarArtistasOrdemAlfabetica();
-            artistaList.forEach(System.out::println);
+            try {
+                List<String> artistaList = artistaRepository.listarArtistasOrdemAlfabetica();
+                artistaList.forEach(System.out::println);
 
-            System.out.print("\nDigite o nome do Artista: ");
-            String nomeDigitado = scan.nextLine();
+                System.out.print("\nDigite o nome do Artista: ");
+                String nomeDigitado = scan.nextLine();
 
-            List<Musica> musicaList = musicaRepository.buscaMusicasPorArtista(nomeDigitado);
+                if (nomeDigitado.isEmpty() || nomeDigitado.trim().isEmpty()) {
+                    throw new IllegalArgumentException("\nO nome não pode estar em branco ou conter apenas espaços\n");
+                }
 
-            if (!musicaList.isEmpty()) {
-                musicaList.stream()
-                        .forEach(System.out::println);
-            } else {
-                System.out.println("\nNenhuma música de " + nomeDigitado + " foi encontrada!\n");
+                List<Musica> musicaList = musicaRepository.buscaMusicasPorArtista(nomeDigitado);
+
+                if (!musicaList.isEmpty()) {
+                    musicaList.stream()
+                            .forEach(System.out::println);
+                } else {
+                    System.out.println("\nNenhuma música de " + nomeDigitado + " foi encontrada!\n");
+                }
+
+                System.out.print("Gostaria de realizar uma nova busca (S/N)? ");
+                opcao = scan.nextLine();
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
             }
-
-            System.out.print("Gostaria de realizar uma nova busca (S/N)? ");
-            opcao = scan.nextLine();
-
         }
     }
 
