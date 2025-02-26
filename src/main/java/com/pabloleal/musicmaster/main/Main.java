@@ -124,20 +124,28 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            System.out.print("Digite o nome do Artista: ");
-            String nomeDigitado = scan.nextLine();
+            try {
+                System.out.print("Digite o nome do Artista: ");
+                String nomeDigitado = scan.nextLine();
 
-            artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+                if (nomeDigitado.isEmpty() || nomeDigitado.trim().isEmpty()) {
+                    throw new IllegalArgumentException("\nO nome não pode estar em branco ou conter apenas espaços\n");
+                }
 
-            if (artistaBuscado.isPresent()) {
-                System.out.println("\nArtista já cadastrado no banco de dados!\n");
-            } else {
-                cadastrarArtista(nomeDigitado);
-                System.out.println("\nArtista salvo com Sucesso!\n");
+                artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+                if (artistaBuscado.isPresent()) {
+                    System.out.println("\nArtista já cadastrado no banco de dados!\n");
+                } else {
+                    cadastrarArtista(nomeDigitado);
+                    System.out.println("\nArtista salvo com Sucesso!\n");
+                }
+
+                System.out.print("Gostaria de cadastrar outro artista (S/N)? ");
+                opcao = scan.nextLine();
+            } catch (Exception e){
+                System.out.println(e.getMessage());
             }
-
-            System.out.print("Gostaria de cadastrar outro artista (S/N)? ");
-            opcao = scan.nextLine();
 
         }
     }
@@ -252,8 +260,8 @@ public class Main {
                 System.out.println(e.getMessage());
             } catch (InputMismatchException e) {
                 System.out.println("\n=================================" +
-                                   "\n         Entrada Invalida" +
-                                   "\n=================================");
+                        "\n         Entrada Invalida" +
+                        "\n=================================");
                 scan.nextLine();
                 continue;
             }
