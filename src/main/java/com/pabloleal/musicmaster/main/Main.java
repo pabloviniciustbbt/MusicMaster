@@ -143,10 +143,9 @@ public class Main {
 
                 System.out.print("Gostaria de cadastrar outro artista (S/N)? ");
                 opcao = scan.nextLine();
-            } catch (Exception e){
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
-
         }
     }
 
@@ -156,45 +155,52 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            int generoDigitado;
-
-            System.out.print("\nDigite o nome da Música: ");
-            String musicaDigitada = scan.nextLine();
-
-            System.out.print("Digite o nome do Artista: ");
-            String nomeDigitado = scan.nextLine();
-
-            artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
-
-            if (!artistaBuscado.isPresent()) {
-                cadastrarArtista(nomeDigitado);
-            }
-
-            artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
-
             try {
-                System.out.println(menuGenero);
-                generoDigitado = scan.nextInt();
-                scan.nextLine();
-            } catch (InputMismatchException e) {
-                System.out.println("\n=================================" +
-                        "\n         Entrada Invalida" +
-                        "\n=================================");
-                scan.nextLine();
-                continue;
+                int generoDigitado;
+
+                System.out.print("\nDigite o nome da Música: ");
+                String musicaDigitada = scan.nextLine();
+
+                System.out.print("Digite o nome do Artista: ");
+                String nomeDigitado = scan.nextLine();
+
+                if (musicaDigitada.isEmpty() || nomeDigitado.isEmpty() || musicaDigitada.trim().isEmpty() || nomeDigitado.trim().isEmpty()) {
+                    throw new IllegalArgumentException("\nO nome da música ou do artista não pode estar em branco ou conter apenas espaços.\n");
+                }
+
+                artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+                if (!artistaBuscado.isPresent()) {
+                    cadastrarArtista(nomeDigitado);
+                }
+
+                artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
+
+                try {
+                    System.out.println(menuGenero);
+                    generoDigitado = scan.nextInt();
+                    scan.nextLine();
+                } catch (InputMismatchException e) {
+                    System.out.println("\n=================================" +
+                            "\n         Entrada Invalida" +
+                            "\n=================================");
+                    scan.nextLine();
+                    continue;
+                }
+
+                GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
+
+                Musica musica = new Musica(musicaDigitada, artistaBuscado.get(), generoMusical);
+
+                musicaRepository.save(musica);
+
+                System.out.println("\nMúsica salva com sucesso!\n");
+
+                System.out.print("Gostaria de cadastrar outra música (S/N)? ");
+                opcao = scan.nextLine();
+            } catch (IllegalArgumentException e) {
+                System.out.println(e.getMessage());
             }
-
-            GeneroMusical generoMusical = GeneroMusical.fromInt(generoDigitado);
-
-            Musica musica = new Musica(musicaDigitada, artistaBuscado.get(), generoMusical);
-
-            musicaRepository.save(musica);
-
-            System.out.println("\nMúsica salva com sucesso!\n");
-
-            System.out.print("Gostaria de cadastrar outra música (S/N)? ");
-            opcao = scan.nextLine();
-
         }
     }
 
