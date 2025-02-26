@@ -118,6 +118,12 @@ public class Main {
         artistaRepository.save(artista);
     }
 
+    public Artista cadastrarERetornarArtista(String nomeArtista) {
+        Artista artista = new Artista(nomeArtista);
+        artistaRepository.save(artista);
+        return artista;
+    }
+
     private void cadastrarArtista() {
 
         String opcao = "s";
@@ -171,10 +177,8 @@ public class Main {
                 artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
                 if (!artistaBuscado.isPresent()) {
-                    cadastrarArtista(nomeDigitado);
+                    artistaBuscado = Optional.of(cadastrarERetornarArtista(nomeDigitado));
                 }
-
-                artistaBuscado = artistaRepository.findByNomeContainingIgnoreCase(nomeDigitado);
 
                 try {
                     System.out.println(menuGenero);
