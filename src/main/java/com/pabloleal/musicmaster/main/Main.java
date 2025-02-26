@@ -250,7 +250,7 @@ public class Main {
 
                 System.out.print("Gostaria de realizar uma nova busca (S/N)? ");
                 opcao = scan.nextLine();
-            } catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -295,16 +295,22 @@ public class Main {
 
         while (opcao.equalsIgnoreCase("s")) {
 
-            System.out.print("\nVocê quer pesquisar dados sobre qual Artista? ");
-            String nomeArtista = scan.nextLine();
+            try {
+                System.out.print("\nVocê quer pesquisar dados sobre qual Artista? ");
+                String nomeArtista = scan.nextLine();
 
+                if (nomeArtista.isEmpty() || nomeArtista.trim().isEmpty()) {
+                    throw new IllegalArgumentException("\nO nome não pode estar em branco ou conter apenas espaços");
+                }
 
-            String resposta = ConsultaGemini.obterDadosArtista(nomeArtista);
-            System.out.println(resposta.trim() + "\n");
+                String resposta = ConsultaGemini.obterDadosArtista(nomeArtista);
+                System.out.println(resposta.trim() + "\n");
 
-            System.out.print("Gostaria de realizar uma nova pesquisa (S/N)? ");
-            opcao = scan.nextLine();
-
+                System.out.print("Gostaria de realizar uma nova pesquisa (S/N)? ");
+                opcao = scan.nextLine();
+            } catch (IllegalArgumentException e){
+                System.out.println(e.getMessage());
+            }
         }
     }
 
